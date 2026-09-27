@@ -1,0 +1,59 @@
+// as there are various type ,to understand output we can search so that the word marks 
+// to search in terminal -> ctrl + f -> appears search bar  // type single/other in search bar to visualize output
+
+
+package multitThreading;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class ExecutorServiceDemo {
+    public static void main(String[] args) {
+
+        // single thread executor
+        ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+        System.out.println("single thread executor:");
+        for (int i = 1; i <= 5; i++) {
+            final int taskId = i;
+            singleThreadExecutor.execute(() -> {
+                System.out.println("single thread task " + taskId + " executed by thread: " + Thread.currentThread().getName());
+            });
+        }
+        singleThreadExecutor.shutdown();
+
+        // fixed thread pool
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+        System.out.println("\nFixed thread pool:");
+        for (int i = 1; i <= 5; i++) {
+            final int taskId = i;
+            fixedThreadPool.execute(() -> {
+                System.out.println("fixed thread task " + taskId + " executed by thread: " + Thread.currentThread().getName());
+            });
+        }
+        fixedThreadPool.shutdown();
+
+        // cached thread pool
+        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+        System.out.println("\nCached thread pool:");
+        for (int i = 1; i <= 5; i++) {
+            final int taskId = i;
+            cachedThreadPool.execute(() -> {
+                System.out.println("cached thread task " + taskId + " executed by thread: " + Thread.currentThread().getName());
+            });
+        }
+        cachedThreadPool.shutdown();
+
+        // shceduled thread pool
+        System.out.println("\nscheduled thread pool:");
+        ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(2);
+        for (int i = 1; i <= 5; i++) {
+            final int taskId = i;
+            scheduledThreadPool.schedule(() -> {
+                System.out.println("scheduled thread task " + taskId + " executed by thread: " + Thread.currentThread().getName());
+            }, 3, TimeUnit.SECONDS);    // schedule each task to execute after 3 seconds
+        }
+        scheduledThreadPool.shutdown();
+    }
+}
